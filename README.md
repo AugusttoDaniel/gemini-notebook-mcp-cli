@@ -708,7 +708,9 @@ _(All queries sent from CLI or MCP automatically persist in your Gemini Notebook
 2. Reloads cookies from disk if updated externally
 3. Runs headless browser auth if profile has saved login
 
-You can also call `refresh_auth()` to explicitly reload tokens.
+You can also call `refresh_auth()` to explicitly reload and validate tokens, or
+`refresh_auth(profile="work")` to refresh a named saved account without
+switching the MCP server's active account.
 
 If automatic refresh fails (Google login fully expired), run `nlm login` again.
 
