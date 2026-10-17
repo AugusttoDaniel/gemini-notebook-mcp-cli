@@ -85,3 +85,9 @@ def test_partial_failure_returns_false(rpc):
     rpc.side_effect = [[], None, []]
     assert _mixin().edit_collection(COL_ID, name="Group 2", notebook_ids=["nb-b", "nb-c"]) is False
     assert len(_edit_payloads(rpc)) == 3
+
+
+def test_rename_unknown_collection_raises(rpc):
+    with pytest.raises(ValueError):
+        _mixin().edit_collection("missing", name="New name")
+    assert _edit_payloads(rpc) == []

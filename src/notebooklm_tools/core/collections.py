@@ -114,9 +114,10 @@ class CollectionsMixin(BaseClient):
             remove:  [[None, None, None, None, [[id, ...]]], []]
         Sending the whole list, or name and notebooks together, returns INVALID_ARGUMENT.
 
-        Membership is read before anything is written, so an unknown collection
-        fails without applying the rename. The operations are not atomic: a
-        later step can fail after an earlier one succeeded.
+        The backend returns [] for an unknown collection_id as well, so the
+        collection is looked up before any write and an unknown one raises
+        without applying changes. The operations are not atomic: a later step
+        can fail after an earlier one succeeded.
         """
         header = self._get_collections_header()
 
@@ -126,7 +127,7 @@ class CollectionsMixin(BaseClient):
 
         to_add = []
         to_remove = []
-        if notebook_ids is not None:
+        if name is not None or notebook_ids is not None:
             current = None
             for col in self.list_collections():
                 if col["id"] == collection_id:
@@ -134,6 +135,7 @@ class CollectionsMixin(BaseClient):
                     break
             if current is None:
                 raise ValueError(f"Collection not found: {collection_id}")
+        if notebook_ids is not None:
             wanted = list(dict.fromkeys(notebook_ids))
             to_add = [i for i in wanted if i not in current]
             to_remove = [i for i in current if i not in wanted]

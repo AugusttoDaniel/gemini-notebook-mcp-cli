@@ -2068,7 +2068,7 @@ The web UI sends **one operation per call** (captured from notebook.google.com):
 | Add notebooks | `[[null, null, null, [[notebook_id, ...]]], []]` |
 | Remove notebooks | `[[null, null, null, null, [[notebook_id, ...]]], []]` |
 
-Add/remove carry only the **delta**, not the full membership list. Sending the full list, or name and notebooks in one payload, returns `INVALID_ARGUMENT`. `edit_collection(notebook_ids=...)` therefore reads the current membership and issues separate add/remove calls.
+Add/remove carry only the **delta**, not the full membership list. Sending the full list, or name and notebooks in one payload, returns `INVALID_ARGUMENT`. `edit_collection(notebook_ids=...)` therefore reads the current membership and issues separate add/remove calls. The RPC also returns `[]` for an unknown `collection_id`, so `edit_collection` looks the collection up before writing and raises if it does not exist.
 
 ## User Tier and Usage Limits
 
