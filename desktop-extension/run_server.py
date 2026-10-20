@@ -82,7 +82,9 @@ def main() -> None:
 
     # Run the MCP server — explicit stdio passthrough is critical because
     # Claude Desktop communicates with MCP servers via stdin/stdout JSON-RPC.
-    cmd = [uvx, "--from", "notebooklm-mcp-cli", "notebooklm-mcp", *sys.argv[1:]]
+    # Pinned to the reviewed release: an unpinned uvx fetches whatever PyPI
+    # serves at launch time, so a new upload would run without review.
+    cmd = [uvx, "--from", "notebooklm-mcp-cli==0.15.6", "notebooklm-mcp", *sys.argv[1:]]
     try:
         result = subprocess.run(
             cmd,
